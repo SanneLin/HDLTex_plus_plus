@@ -4,6 +4,7 @@
 import numpy as np
 from sklearn.svm import LinearSVC
 from sklearn.multiclass import OneVsRestClassifier
+from scipy.special import expit
 
 def hierSVM(X, y_train_lvl1, y_train_lvl2, y_train_lvl3,
             number_of_classes_L1, number_of_classes_L2, number_of_classes_L3,
@@ -148,8 +149,8 @@ def get_predictions(X, clf_L1, clf_L2, clf_L3, number_of_classes_L3, thresh):
     """
     y_func_L1, y_func_L2, y_func_L3 = get_decision_matrices(X, clf_L1, clf_L2, clf_L3, number_of_classes_L3)
 
-    y_pred_bin_L1 = np.where(y_func_L1 > thresh[0], 1, 0)
-    y_pred_bin_L2 = np.where(y_func_L2 > thresh[1], 1, 0)
-    y_pred_bin_L3 = np.where(y_func_L3 > thresh[2], 1, 0)
+    y_pred_bin_L1 = np.where(expit(y_func_L1) > thresh[0], 1, 0)
+    y_pred_bin_L2 = np.where(expit(y_func_L2) > thresh[1], 1, 0)
+    y_pred_bin_L3 = np.where(expit(y_func_L3) > thresh[2], 1, 0)
 
     return y_pred_bin_L1, y_pred_bin_L2, y_pred_bin_L3

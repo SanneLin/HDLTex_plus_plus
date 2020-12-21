@@ -11,6 +11,7 @@ from scipy.sparse import csr_matrix
 from sklearn.metrics import precision_recall_fscore_support
 from metrics.hierarchical_performance_measures import hierarchical_eval, get_performance
 from hierarchicalSVM import hierSVM, get_predictions
+from scipy.special import expit
 
 if __name__ == "__main__":
 
@@ -56,7 +57,7 @@ if __name__ == "__main__":
     flat_clf.fit(X_train_sc, y_train_lvl3)
 
     y_dec_func = flat_clf.decision_function(X_test_sc)
-    y_bin_pred = csr_matrix(np.where(np.array(y_dec_func) > thresh_flat, 1, 0))
+    y_bin_pred = csr_matrix(np.where(expit(np.array(y_dec_func)) > thresh_flat, 1, 0))
 
     # Evaluate performance
     macroP, macroR, macroF1, _ = precision_recall_fscore_support(y_test_lvl3, y_bin_pred, average='macro')
